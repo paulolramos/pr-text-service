@@ -21,3 +21,5 @@ touch .env
 ```javascript
 cron.schedule("0 30 7 * * *", () => sendTextMessage(phoneNumber));
 ```
+
+#### Deploy it somewhere. Remember, it's intented to run continuouslyyy...
