@@ -5,12 +5,8 @@ const cron = require("node-cron");
 const app = new Koa();
 const port = process.env.PORT || 3000;
 
-const fetchRandomFact = async () => {
-  const {
-    data: { text }
-  } = await axios("https://uselessfacts.jsph.pl/random.json?language=en");
-  return text;
-};
+const fetchRandomFact = async () =>
+  await axios("https://uselessfacts.jsph.pl/random.json?language=en");
 
 const sendTextMessage = async textMessage => {
   const phoneNumber = process.env.MY_PHONE_NUMBER;
@@ -28,7 +24,7 @@ const sendTextMessage = async textMessage => {
 };
 
 // Scheduled to be sent at 7:30am everyday
-cron.schedule("0 30 7 * * *", async () =>
+cron.schedule("0 38 15 * * *", async () =>
   sendTextMessage(await fetchRandomFact())
 );
 
