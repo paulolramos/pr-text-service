@@ -24,7 +24,7 @@ const sendTextMessage = async textMessage => {
 };
 
 // Scheduled to be sent at 7:30am everyday
-cron.schedule("0 50 15 * * *", async () =>
+cron.schedule("0 0 16 * * *", async () =>
   sendTextMessage(await fetchRandomFact())
 );
 
