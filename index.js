@@ -3,7 +3,7 @@ const Koa = require("koa");
 const axios = require("axios");
 const cron = require("node-cron");
 const app = new Koa();
-const phoneNumber = process.env.MY_PHONE_NUMBER;
+const port = process.env.PORT || 3000;
 
 const fetchRandomFact = async () => {
   const {
@@ -12,21 +12,26 @@ const fetchRandomFact = async () => {
   return text;
 };
 
-const sendTextMessage = async phoneNumber => {
-  const textMessage = await fetchRandomFact();
+const sendTextMessage = async textMessage => {
+  const phoneNumber = process.env.MY_PHONE_NUMBER;
   const accountSid = process.env.TWILIO_ACCOUNT;
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   const client = require("twilio")(accountSid, authToken);
 
-  const response = await client.messages.create({
+  const { sid, status, body } = await client.messages.create({
     body: textMessage,
     from: process.env.TWILIO_NUMBER,
     to: phoneNumber
   });
-  console.log({ sid: response.sid, status: response.status });
+
+  console.log({ sid, status, body });
 };
 
 // Scheduled to be sent at 7:30am everyday
-cron.schedule("0 30 7 * * *", () => sendTextMessage(phoneNumber));
+cron.schedule("0 30 7 * * *", async () =>
+  sendTextMessage(await fetchRandomFact())
+);
 
-app.listen(process.env.PORT || 3000);
+app.listen(port, () =>
+  console.log(`running text messaging service on port ${port}...`)
+);
