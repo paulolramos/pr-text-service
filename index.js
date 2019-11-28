@@ -5,8 +5,12 @@ const cron = require("node-cron");
 const app = new Koa();
 const port = process.env.PORT || 3000;
 
-const fetchRandomFact = async () =>
-  await axios("https://uselessfacts.jsph.pl/random.json?language=en");
+const fetchRandomFact = async () => {
+  const {
+    data: { text }
+  } = await axios("https://uselessfacts.jsph.pl/random.json?language=en");
+  return text;
+};
 
 const sendTextMessage = async textMessage => {
   const phoneNumber = process.env.MY_PHONE_NUMBER;
@@ -24,10 +28,15 @@ const sendTextMessage = async textMessage => {
 };
 
 // Scheduled to be sent at 7:30am everyday
-cron.schedule("0 0 16 * * *", async () =>
-  sendTextMessage(await fetchRandomFact())
-);
+// hour is entered as UTC time,
+// as I have it deployed in aws (check your server's time)
+cron.schedule("0 30 3 * * *", async () => {
+  const randomFact = await fetchRandomFact();
+  sendTextMessage(randomFact);
+});
 
-app.listen(port, () =>
-  console.log(`running text messaging service on port ${port}...`)
-);
+app.listen(port, () => {
+  const today = new Date();
+  const UTCInfo = `(UTC: ${today.getUTCMonth()}/${today.getUTCDate()}/${today.getUTCFullYear()} | Hr: ${today.getUTCHours()} Min: ${today.getUTCMinutes()}):`;
+  console.log(`${UTCInfo} running text messaging service on port ${port}...`);
+});
