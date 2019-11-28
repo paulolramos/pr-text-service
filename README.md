@@ -1,14 +1,12 @@
-## Send Random facts to your phone using [Twilio](https://www.twilio.com/)
+## Send random facts to your phone using [Twilio](https://www.twilio.com/)
 
 ### Create .env in project's root directory
 
 ```bash
-
 touch .env
-
 ```
 
-### Add these to .env
+### Add these environment variables to .env
 
 - TWILIO_ACCOUNT=SECRET
 - TWILIO_AUTH_TOKEN=GET_YOUR_OWN
@@ -20,9 +18,14 @@ touch .env
 ###### Check out the docz for [node-cron](https://www.npmjs.com/package/node-cron)
 
 ```javascript
-cron.schedule("0 30 7 * * *", async () =>
-  sendTextMessage(await fetchRandomFact())
-);
+cron.schedule("0 30 15 * * *", async () => {
+  const randomFact = await fetchRandomFact();
+  sendTextMessage(randomFact);
+});
 ```
 
 #### Deploy it somewhere. Remember, it's intented to run continuouslyyy...
+
+I deployed it to AWS elastic beanstalk and works like a charm.
+
+Use the bash script _zip-for-aws.sh_ to zip the necessary files to deploy to AWS. You will have to set the environment variables via the elastic beanstalk settings, so no need to include .env file.
