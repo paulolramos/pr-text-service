@@ -13,7 +13,7 @@ touch .env
 - TWILIO_NUMBER=TOP_SECRET_NUMBER
 - MY_PHONE_NUMBER=YOU_WISH
 
-##### Configure how often you want random facts sent to your cellularz device (pre-configured to send at 7:30am errday. Rise and Shine!).
+##### Configure how often you want random facts sent to your cellularz device (pre-configured to send at 7:30am errday (UTC Time). Rise and Shine!).
 
 ###### Check out the docz for [node-cron](https://www.npmjs.com/package/node-cron)
 
