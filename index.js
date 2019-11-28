@@ -30,13 +30,13 @@ const sendTextMessage = async textMessage => {
 // Scheduled to be sent at 7:30am everyday
 // hour is entered as UTC time,
 // as I have it deployed in aws (check your server's time)
-cron.schedule("0 30 3 * * *", async () => {
+cron.schedule("0 30 15 * * *", async () => {
   const randomFact = await fetchRandomFact();
   sendTextMessage(randomFact);
 });
 
 app.listen(port, () => {
-  const today = new Date();
-  const UTCInfo = `(UTC: ${today.getUTCMonth()}/${today.getUTCDate()}/${today.getUTCFullYear()} | Hr: ${today.getUTCHours()} Min: ${today.getUTCMinutes()}):`;
-  console.log(`${UTCInfo} running text messaging service on port ${port}...`);
+  console.log(
+    `UTC ${new Date().getUTCHours()}:${new Date().getUTCMinutes()}:${new Date().getUTCSeconds()} => server running text messaging service on port ${port}...`
+  );
 });
